@@ -1,6 +1,7 @@
 #include "PHIL_JSON.h"
 #include <string.h>
 
+int debug1=0;
 
 int remove_slash(char*b) {//removes all instances of a character from a string, useful for removing stray "/" from json strings
 	for (int i = 0; i < strlen(b); i++) {
@@ -58,7 +59,7 @@ int check_JSMN_error(int numtok, char* location) {//Prints error and error locat
 }
 
 void output_string(char* s) {//redefine this to fit whatever system you're working on, for example, on an embedded system reimpliment this as output to TX buffer
-	printf(s);
+	
 }
 
 
@@ -122,12 +123,22 @@ int extract_value(char* JSONSTR, char* key, char *target) {
 	jsmn_init(&parser);
 	jsmntok_t tokens1[50];
 	int numtok1 = jsmn_parse(&parser, JSONSTR, strlen(JSONSTR), tokens1, 50);//tokenize JSON string
+
 	if (check_JSMN_error(numtok1, "EXTRACTION")) {//Error Checking
 		return 5;
+	}
+	
+						if((strcmp(key,"Version")==0))
+		{debug1=debug1;}
+	if (numtok1<=1){
+		return 4;
 	}
 	for (int i = 0; i < numtok1; i++) {//Loop through all the tokens
 		memcpy(output1, (const char*)&JSONSTR[tokens1[i].start], abs(tokens1[i].start - tokens1[i].end));//copy the token of interest into a separate string
 		output1[abs(tokens1[i].start - tokens1[i].end)] = '\0';
+
+
+
 		if (strcmp(output1, key) == 0) {//Check to see if the token matches the specified key
 			memcpy(target, &JSONSTR[tokens1[i + 1].start], abs(tokens1[i + 1].start - tokens1[i + 1].end));//copy the response type information into the target string location
 			target[abs(tokens1[i + 1].start - tokens1[i + 1].end)] = '\0';//terminate the target string
@@ -143,19 +154,21 @@ int extract_value_2(char* JSONSTR, char* key0, char* key1, char* key2, char *tar
 	char output[256];
 	char output1[256];
 	int a, b, c, d = 1;
-	d = count_slash(JSONSTR);
+	d = count_slash(JSONSTR);/*
 	if (d != 6) {
 		return 1;
-	}
+	}*/
 	a = extract_value(JSONSTR, key0, output);
-	remove_slash(output);
-	remove_slash(output);
+	//remove_slash(output);
+	//remove_slash(output);
 	/*printf("OUTPUTREMOVEDSLASH=");
 	printf(output);
 	printf("\n");*/
 	b = extract_value(output, key1, output1);
 	remove_slash(output1);
 	c = extract_value(output1, key2, target);
+	remove_slash(target);
+//	remove_slash(target);
 	if (!a && !b && !c) {
 		return 0;
 	}
@@ -167,18 +180,37 @@ int extract_value_2(char* JSONSTR, char* key0, char* key1, char* key2, char *tar
 int extract_value_1(char* JSONSTR, char* key0, char* key1, char *target)
 {
 	char output[256];
-	int a, b, d = 1;
+	int a, b, d = 1;/*
 	d = count_slash(JSONSTR);
 	if (d != 2) {
 		return 1;
-	}
+	}*/
 	a = extract_value(JSONSTR, key0, output);
-	remove_slash(output);
+					if(strcmp(key1,"Version")==0)
+		{
+			debug1=debug1;
+		}
+	
+							if(strcmp(key1,"Version")==0)
+		{
+		debug1=debug1;
+		}
 	b = extract_value(output, key1, target);
+							if(strcmp(key1,"Version")==0)
+		{
+			debug1=debug1;
+		}
+		remove_slash(target);
 	if (!a && !b) {
+		if(debug1==1)
+		{debug1++;}
+		debug1++;
 		return 0;
+
 	}
 	else {
+				if(debug1==1)
+		{debug1++;}
 		return 1;
 	}
 }

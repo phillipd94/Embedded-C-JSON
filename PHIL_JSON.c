@@ -1,5 +1,5 @@
-
-
+#include "PHIL_JSON.h"
+#include <string.h>
 
 
 int remove_slash(char*b) {//removes all instances of a character from a string, useful for removing stray "/" from json strings
@@ -63,7 +63,6 @@ void output_string(char* s) {//redefine this to fit whatever system you're worki
 
 
 int pack_json(char* format, char* target, ...) {//works similar to printf: example format string "{s:b,s:{s:[n,n,n,n]}}"  b is bool, n is float, s is string, returns 1 on failure
-	unsigned int i;
 	char* s;
 	float f;
 	char m[100];
@@ -117,7 +116,7 @@ int pack_json(char* format, char* target, ...) {//works similar to printf: examp
 }
 
 int extract_value(char* JSONSTR, char* key, char *target) {
-	int d;
+
 	char output1[256];
 	jsmn_parser parser;
 	jsmn_init(&parser);
@@ -139,7 +138,7 @@ int extract_value(char* JSONSTR, char* key, char *target) {
 }
 
 
-int extract_deep_value(char* JSONSTR, char* key0, char* key1, char* key2, char *target)
+int extract_value_2(char* JSONSTR, char* key0, char* key1, char* key2, char *target)
 {
 	char output[256];
 	char output1[256];
@@ -165,10 +164,9 @@ int extract_deep_value(char* JSONSTR, char* key0, char* key1, char* key2, char *
 	}
 }
 
-int extract_deep_value(char* JSONSTR, char* key0, char* key1, char *target)
+int extract_value_1(char* JSONSTR, char* key0, char* key1, char *target)
 {
 	char output[256];
-	char output1[256];
 	int a, b, d = 1;
 	d = count_slash(JSONSTR);
 	if (d != 2) {

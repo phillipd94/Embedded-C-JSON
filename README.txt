@@ -5,9 +5,9 @@ extracting a value from a JSON string is as simple as calling the function extra
 
 This library also contains functions that will automatically parse nested JSON strings, and take multiple key arguments, one for each layer.  Examples below:
 
-Example: Parsing a value from a 
+Example: Parsing a value from a double nested string
 
-char input[256] = "{\"Response\":\"WifiSetup\",\"Message\":{\"Wifi\":\"{\\\"Result\\\":\\\"Success\\\",\\\"IP\\\":\\\"192.168.123.135\\\"}\"}}"
+char input[256] = "{\"Response\":\"WifiSetup\",\"Message\":{\"Wifi\":\"{\\\"Result\\\":\\\"Success\\\",\\\"IP\\\":\\\"192.168.123.135\\\"}\"}}";
 char output[256];
 
 extract_value_2(input,"Message","Wifi","Result",output);
